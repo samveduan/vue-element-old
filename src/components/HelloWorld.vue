@@ -1,7 +1,28 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header> 
+        <el-row>
+          <el-col :span="6"><div>Header</div></el-col>
+          <el-col :span="2" :offset="16">
+            <div style="padding-top: 10px;">
+              <span id="loginer">张某某</span>
+              <el-dropdown style="line-height: 40px;">
+                <a href="#" target="_self">
+                  <el-avatar src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570179506639&di=4935eca28d128fe483724e9bb0bbd426&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201707%2F04%2F20170704113215_uAwk5.jpeg"></el-avatar>
+                </a>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item @click.native="loginOut">退出</el-dropdown-item>
+                  <el-dropdown-item>狮子头</el-dropdown-item>
+                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                  <el-dropdown-item>双皮奶</el-dropdown-item>
+                  <el-dropdown-item>蚵仔煎</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            </div>
+          </el-col>
+        </el-row>
+      </el-header>
       <el-container>
         <el-aside width="200px">
             <el-row class="tac">
@@ -31,7 +52,7 @@
 
                       <!--一级菜单-->
                       <template v-else>
-                          <el-menu-item :index="child.path" :key="index" v-for="(child, index) in item.children">
+                          <el-menu-item :index="child.path" :key="child.path" v-for="(child, index) in item.children">
                             <i :class="child.iconCls"></i>
                             <span slot="title">{{child.name}}</span>
                           </el-menu-item>
@@ -108,6 +129,11 @@ export default {
       },
       asyncSetJob(){
           this.$store.dispatch("People/asyncSetJob", "P9");
+      },
+      loginOut(){
+          localStorage.setItem("islogin", 0);
+          console.log(localStorage.getItem("islogin"));
+          this.$router.push("/login");
       }
   },
   computed: {
@@ -213,5 +239,12 @@ body > .el-container {
 }
 .el-menu-vertical-demo{
   background:#4175a4;
+}
+.el-dropdown{
+  height: 40px;
+}
+
+#loginer{
+  display: inline-block; margin-bottom: 20px; float: left; line-height: 40px; padding-right: 20px; font-size: 14px;
 }
 </style>

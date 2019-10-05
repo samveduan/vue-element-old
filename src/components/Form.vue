@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import qs from 'qs'
   export default {
     data() {
       return {
@@ -58,11 +59,32 @@
     },
     methods: {
       submitForm(formName) {
+        let that  = this;
+        let param = new URLSearchParams();
+        param.append('name', that.ruleForm.name);
+        param.append('server', that.ruleForm.server);
+        param.append('org', that.ruleForm.org);
+        param.append('desc', that.ruleForm.desc);
+        
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            that.$axios({
+              method: 'post',
+              url: 'http://localhost:9999/article/check_form/',
+              data: param
+            })
+            .then(function(res){
+              if(res.data.ret){
+                that.$message('提交成功！');
+                that.$refs[formName].resetFields();
+                that.$router.push('/tag');
+              }
+            })
+            .catch(function(err){
+              console.log(err);
+            })
           } else {
-            console.log('error submit!!');
+            that.$message('error submit!!');
             return false;
           }
         });

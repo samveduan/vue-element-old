@@ -8,23 +8,30 @@
 export default {
     methods: {
         drawChart(){
-            let chart = this.$echarts.init(document.getElementById("chart"));
-            let option = {
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [{
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
-                    type: 'line',
-                    areaStyle: {}
-                }]
-            };
-            chart.setOption(option);
+            let that = this;
+            this.$axios.get("http://localhost:9999/article/echart/")
+            .then(function (response) {
+                    let chart = that.$echarts.init(document.getElementById("chart"));
+                    let option = {
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: response.data.xAxis
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: response.data.series,
+                            type: 'line',
+                            areaStyle: {}
+                        }]
+                    };
+                    chart.setOption(option);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
         }
     },
     mounted(){

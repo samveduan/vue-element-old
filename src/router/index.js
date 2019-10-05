@@ -11,10 +11,11 @@ const Login = () => import('@/components/Login')
 const Tabs = () => import('@/components/Tabs')
 const Rate = () => import('@/components/Rate')
 const Form = () => import('@/components/Form')
+const Dialog = () => import('@/components/Dialog')
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -23,8 +24,24 @@ export default new Router({
       iconCls: 'el-icon-s-flag',
       leaf: false,
       children: [
-          { path: '/tabs', component: Tabs, name: 'Tabs', iconCls: 'el-icon-star-on'},
-          { path: '/rate', component: Rate, name: 'Rate', iconCls: 'el-icon-star-on'}
+          { 
+            path: '/tabs', 
+            component: Tabs, 
+            name: 'Tabs', 
+            iconCls: 'el-icon-star-on',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
+          },
+          { 
+            path: '/rate', 
+            component: Rate, 
+            name: 'Rate', 
+            iconCls: 'el-icon-star-on',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
+          }
       ]
     },
     {
@@ -38,7 +55,10 @@ export default new Router({
             path: '/badge', 
             component: Badge, 
             name: 'Badge', 
-            iconCls: 'el-icon-s-help'
+            iconCls: 'el-icon-s-help',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -53,7 +73,10 @@ export default new Router({
             path: '/table', 
             component: Table, 
             name: 'Table', 
-            iconCls: 'el-icon-upload'
+            iconCls: 'el-icon-upload',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -68,7 +91,10 @@ export default new Router({
             path: '/tag', 
             component: Tag, 
             name: 'Tag', 
-            iconCls: 'el-icon-s-cooperation'
+            iconCls: 'el-icon-s-cooperation',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -83,7 +109,10 @@ export default new Router({
             path: '/progress', 
             component: Progress, 
             name: 'Progress', 
-            iconCls: 'el-icon-s-order'
+            iconCls: 'el-icon-s-order',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -98,7 +127,10 @@ export default new Router({
             path: '/chart', 
             component: Chart, 
             name: 'Chart', 
-            iconCls: 'el-icon-s-flag'
+            iconCls: 'el-icon-s-flag',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -113,7 +145,28 @@ export default new Router({
             path: '/form', 
             component: Form, 
             name: 'Form', 
-            iconCls: 'el-icon-s-flag'
+            iconCls: 'el-icon-s-flag',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
+          }
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: 'Home',
+      iconCls: 'fa fa-address-card',
+      leaf: true,//只有一个节点
+      children: [
+          { 
+            path: '/dialog', 
+            component: Dialog, 
+            name: 'Dialog', 
+            iconCls: 'el-icon-s-flag',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
           }
       ]
     },
@@ -121,7 +174,10 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-      hidden: true
+      hidden: true,
+      meta: { // 在路由配置中加入meta:{requireAuth: true}
+       requireAuth: true
+      }
     },
     {
       path: '*',
@@ -135,4 +191,26 @@ export default new Router({
       component: NotFound
     }
   ]
+})
+
+export default router
+
+router.beforeEach((to, from, next) => {
+  let islogin = localStorage.getItem("islogin");
+  islogin = Boolean(Number(islogin));
+
+  if(to.path == "/login"){
+    if(islogin){
+      next("/table");
+    }else{
+      next();
+    }
+  }else{
+    // requireAuth:可以在路由元信息指定哪些页面需要登录权限
+    if(to.meta.requireAuth && islogin) {
+      next();
+    }else{
+      next("/login");
+    }
+  }
 })
