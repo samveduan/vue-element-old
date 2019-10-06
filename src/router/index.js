@@ -4,6 +4,7 @@ const Home = () => import('@/components/HelloWorld')
 const Badge = () => import('@/components/Badge')
 const Progress = () => import('@/components/Progress')
 const Table = () => import('@/components/Table')
+const Table2 = () => import('@/components/Table2')
 const Tag = () => import('@/components/Tag')
 const Chart = () => import('@/components/Chart')
 const NotFound = () => import('@/components/NotFound')
@@ -73,6 +74,24 @@ let router = new Router({
             path: '/table', 
             component: Table, 
             name: 'Table', 
+            iconCls: 'el-icon-upload',
+            meta: { // 在路由配置中加入meta:{requireAuth: true}
+             requireAuth: true
+            }
+          }
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: 'Home',
+      iconCls: 'fa fa-address-card',
+      leaf: true,//只有一个节点
+      children: [
+          { 
+            path: '/table2', 
+            component: Table2, 
+            name: 'Table2', 
             iconCls: 'el-icon-upload',
             meta: { // 在路由配置中加入meta:{requireAuth: true}
              requireAuth: true

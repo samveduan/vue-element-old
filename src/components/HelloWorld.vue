@@ -13,10 +13,6 @@
                 </a>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item @click.native="loginOut">退出</el-dropdown-item>
-                  <el-dropdown-item>狮子头</el-dropdown-item>
-                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item>双皮奶</el-dropdown-item>
-                  <el-dropdown-item>蚵仔煎</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             </div>
@@ -31,6 +27,7 @@
                   :default-active="$route.path"
                   router unique-opened
                   class="el-menu-vertical-demo"
+                  style="background: #eef1f6;"
                   @open="handleOpen"
                   @close="handleClose">
 
@@ -201,7 +198,7 @@ body{
 }
 
 .el-aside {
-  background-color: #4175a4;
+  background-color: #eef1f6;
   color: #ffffff;
   text-align: left;
   height: 100%;

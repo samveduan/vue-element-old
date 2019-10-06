@@ -109,7 +109,7 @@
                     that.$message(err);
                   })
               }else{
-                console.log('error submit!!');
+                //console.log('error submit!!');
                 return false;
               }
             })
@@ -176,7 +176,7 @@
                     }
               })
               .catch(function(err){
-                console.log(err);
+                // console.log(err);
               })
           },
           delete_table(){
@@ -197,7 +197,7 @@
               let that  = this;
               let param = new URLSearchParams();
               param.append('ids', JSON.stringify(selectedIdArr));
-              console.log(selectedIdArr);
+              // console.log(selectedIdArr);
               
               that.$axios({
                 method: 'post',
@@ -213,7 +213,7 @@
                     }
               })
               .catch(function(err){
-                console.log(err);
+                // console.log(err);
               })
           },
           resetForm(formName){
@@ -277,7 +277,6 @@
                   },{
                     title:'编辑',
                     formatter: function(value, row, index){
-                      console.log(row); 
                       return '<a class="btn btn-default btn-xs" @click="this.editArticle(' + row.id + ')"><i class="glyphicon glyphicon-pencil"></i><span> 编辑</span></a>'	;
                     },
                     width: '10%'
@@ -288,7 +287,7 @@
               },
               onClickRow: function (row, $element) {
                   //	EditViewById(id, 'view');
-                  console.log(row);
+                  //  console.log(row);
               }
           });
       }
