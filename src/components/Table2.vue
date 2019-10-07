@@ -1,7 +1,19 @@
 <template>
     <div>
+        <el-row>
+          <el-col :span="24">
+            <div>
+              <el-button-group>
+                <el-button type="success" icon="el-icon-plus">添加</el-button>
+                <el-button type="success" icon="el-icon-minus" @click="delete_some_data">删除</el-button>
+              </el-button-group>
+            </div>
+          </el-col>
+        </el-row>
+
         <el-table
           :data="tableData"
+          @selection-change="handleSelectionChange"
           border
           style="width: 100%">
           <el-table-column
@@ -79,8 +91,9 @@
         },
         formLabelWidth: '120px',
         currentPage: 1,
-        pagesize: 10,
-        total: 0
+        pagesize: 5,
+        total: 0,
+        selections: 0
       }
     },
     methods: {
@@ -111,6 +124,55 @@
           .catch(function(err){
             that.$message(err);
           })
+      },
+      handleSelectionChange(select){
+          console.log(select);
+          this.selections = select;
+      },
+      delete_some_data(){
+        let that = this;
+        let len = this.selections.length;
+
+        if(len == 0){
+            that.$message.warning("请选择要删除的数据！");
+        }else{
+            let selectedIdArr = [];
+            
+            for(var i = 0; i<len; i++){
+              selectedIdArr.push(this.selections[i].id);
+            }
+
+            that.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                let param = new URLSearchParams();
+                param.append('ids', JSON.stringify(selectedIdArr));
+                // console.log(selectedIdArr);
+                
+                that.$axios({
+                  method: 'post',
+                  url: 'http://localhost:9999/article/delete/',
+                  data: param
+                })
+                .then(function(res){
+                      if(res.data.ret){
+                        that.$message.success("删除成功");
+                        that.getList();
+                      }else{
+                        that.$message.error("删除失败");
+                      }
+                })
+                .catch(function(err){
+                  // console.log(err);
+                })
+            }).catch(() => {
+            
+            });
+        }
+
+
       },
       handleEdit(index, row) {
         console.log(index, row);
